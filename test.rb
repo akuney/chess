@@ -1,9 +1,18 @@
-require_relative 'board'
+load 'pieces.rb'
+load 'board.rb'
 
-b = Board.new
-b[4,1] = nil
-b[4,5] = Rook.new(b, [4,5], :b)
+b = Board.new(false)
 
-#b.move([1,1], [1,2])
-b.move([3,0],[4,1])
+b[7,0] = Rook.new(b, [7,0], :w)
+b[6,1] = Rook.new(b, [6,1], :w)
+b[1,1] = King.new(b, [1,1], :b)
+
+b.move!([1,1], [2,2])
 b.render
+puts b[1,1].class
+#
+# puts b[1,1].moves.inspect
+# puts b[1,1].move_into_check?([2,2])
+# puts b[1,1].valid_moves.inspect
+# b.render
+#

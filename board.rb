@@ -152,5 +152,8 @@ class Board
     duped_board
   end
 
-
+  def checkmate?(color)
+    cant_move = all_pieces(color).all? { |piece| piece.valid_moves.empty? }
+    in_check?(color) && cant_move
+  end
 end
