@@ -70,4 +70,38 @@ class Board
   def [](x,y)
     self.rows[y][x]
   end
+
+  def all_pieces(color)
+    pieces = []
+
+    self.rows.each do |row|
+      row.each do |piece|
+        pieces << piece if !piece.nil? && piece.color == color
+      end
+    end
+
+    pieces
+  end
+
+  def find_king(color)
+    self.rows.each do |row|
+      row.each do |piece|
+        return piece if piece.class == King && piece.color == color
+      end
+    end
+  end
+
+  def in_check?(color)
+    opposite_color = ( (color == :w) ? :b : :w)
+    opposing_pieces = all_pieces(opposite_color)
+
+    king_coords = find_king(color).pos
+
+    opposing_pieces.each do |piece|
+      puts piece.class
+      return true if piece.moves.include?(king_coords)
+    end
+
+    false
+  end
 end

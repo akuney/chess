@@ -87,11 +87,8 @@ end
 class Bishop < SlidingPiece
   def initialize(board, pos, color)
     super(board, pos, color)
-    self.symbol = :b
-  end
-
-  def self.move_dirs
-    [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+    @symbol = :b
+    @move_dirs = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
   end
 end
 
@@ -106,11 +103,9 @@ end
 class Queen < SlidingPiece
   def initialize(board, pos, color)
     super(board, pos, color)
-    self.symbol = :q
-  end
-
-  def self.move_dirs
-    Rook.move_dirs + Bishop.move_dirs
+    @symbol = :q
+    @move_dirs = [[1, 1], [1, -1], [-1, 1], [-1, -1],
+    [1, 0], [-1, 0], [0, 1], [0, -1]]
   end
 end
 
