@@ -1,9 +1,8 @@
 class Piece
-  attr_accessor :board, :pos
+  attr_accessor :board, :pos, :color
 
-  def initialize(board, pos)
-    @board = board
-    @pos = pos
+  def initialize(board, pos, color)
+    @board, @pos, @color = board, pos, color
   end
 
   def moves
@@ -16,6 +15,14 @@ class SlidingPiece < Piece
   def initialize
     super(board, pos)
     @move_dirs = self.class.move_dirs
+  end
+
+  def moves
+    possible_moves = []
+
+    move_dirs.each do |dir|
+
+    end
   end
 end
 
