@@ -98,10 +98,26 @@ class Board
     king_coords = find_king(color).pos
 
     opposing_pieces.each do |piece|
-      puts piece.class
       return true if piece.moves.include?(king_coords)
     end
 
     false
+  end
+
+  def move(start, finish)
+    if self[start[0], start[1]].nil?
+      raise "That is not a valid start position"
+    end
+
+    unless self[start[0], start[1]].moves.include?(finish)
+      raise "Your piece can't go there"
+    end
+
+    self[finish[0], finish[1]] = self[start[0], start[1]]
+    delete(start)
+  end
+
+  def delete(pos)
+    self[pos[0], pos[1]] = nil
   end
 end
