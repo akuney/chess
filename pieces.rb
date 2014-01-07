@@ -9,6 +9,10 @@ class Piece
 
   def moves
   end
+
+  def opposite_color
+    self.color == :w ? :b : :w
+  end
 end
 
 class SlidingPiece < Piece
@@ -54,6 +58,30 @@ class SlidingPiece < Piece
 end
 
 class SteppingPiece < Piece
+  attr_accessor :move_dirs
+
+  def moves
+    possible_moves = []
+    self.move_dirs.each do |dir|
+
+      next_x = self.pos[0] + dir[0]
+      next_y = self.pos[1] + dir[1]
+
+      next if !next_x.between?(0,7) || !next_y.between?(0,7)
+
+      if self.board[next_x, next_y].nil?
+        possible_moves << [next_x, next_y]
+      else
+        unless self.color == self.board[next_x, next_y].color
+          possible_moves << [next_x, next_y]
+        end
+      end
+
+    end
+
+    possible_moves
+  end
+
 end
 
 class Bishop < SlidingPiece
@@ -89,20 +117,93 @@ end
 class Knight < SteppingPiece
   def initialize(board, pos, color)
     super(board, pos, color)
-    self.symbol = :n
+    @symbol = :n
+    @move_dirs = [
+      [2,1],
+      [2,-1],
+      [1,2],
+      [1,-2],
+      [-1,2],
+      [-1,-2],
+      [-2,1],
+      [-2,-1]
+    ]
   end
 end
 
 class King < SteppingPiece
   def initialize(board, pos, color)
     super(board, pos, color)
-    self.symbol = :k
+    @symbol = :k
+    @move_dirs = [
+      [1,1 ],
+      [1, 0],
+      [1, -1],
+      [0, 1],
+      [0, -1],
+      [-1, 1],
+      [-1, 0],
+      [-1,-1]
+    ]
   end
 end
 
 class Pawn < Piece
+  attr_accessor :forward_dir, :diag_dirs, :starting_row
+
   def initialize(board, pos, color)
     super(board, pos, color)
-    self.symbol = :p
+    @symbol = :p
   end
+
+  def moves
+    possible_moves = []
+
+    forward_one = [self.pos[0], self.pos[1] + self.forward_dir[1]]
+    forward_two = [self.pos[0], self.pos[1] + 2 * self.forward_dir[1]]
+
+    if self.board[forward_one[0], forward_one[1]].nil?
+      possible_moves << forward_one
+
+      if self.pos[1] == self.starting_row &&
+        self.board[forward_two[0], forward_two[1]].nil?
+
+        possible_moves << forward_two
+      end
+    end
+
+    self.diag_dirs.each do |diag|
+      new_pos = [self.pos[0] + diag[0], self.pos[1] + diag[1]]
+
+      if self.board[new_pos[0], new_pos[1]]
+        if self.board[new_pos[0], new_pos[1]].color == self.opposite_color
+          possible_moves << new_pos
+        end
+      end
+    end
+
+    possible_moves
+  end
+
+
+end
+
+class WhitePawn < Pawn
+  def initialize(board, pos)
+    super(board, pos, :w)
+    @forward_dir = [0,1]
+    @diag_dirs = [[1,1], [-1,1]]
+    @starting_row = 1
+  end
+
+end
+
+class BlackPawn < Pawn
+  def initialize(board, pos)
+    super(board, pos, :b)
+    @forward_dir = [0,-1]
+    @diag_dirs = [[1,-1], [-1,-1]]
+    @starting_row = 6
+  end
+
 end

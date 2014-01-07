@@ -12,7 +12,6 @@ class Board
     Array.new(8) { Array.new(8) { nil } }
   end
 
-
   def populate_board
     rook_positions = [[0,0], [0,7], [7,0], [7,7]]
     knight_positions = [[1,0], [6,0], [1,7], [6,7]]
@@ -33,8 +32,8 @@ class Board
 
     #making all pawns
     (0..7).each do |x|
-      self[x,1] = Pawn.new(self, [x, 1], :w)
-      self[x,6] = Pawn.new(self, [x, 6], :b)
+      self[x,1] = WhitePawn.new(self, [x, 1])
+      self[x,6] = BlackPawn.new(self, [x, 6])
     end
 
     (0..7).each do |x|
