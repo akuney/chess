@@ -67,4 +67,8 @@ class Board
   def []=(x, y, piece)
     self.rows[y][x] = piece
   end
+
+  def [](x,y)
+    self.rows[y][x]
+  end
 end
