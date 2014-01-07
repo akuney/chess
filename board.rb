@@ -104,6 +104,11 @@ class Board
     false
   end
 
+  def move!(start, finish)
+    self[finish[0], finish[1]] = self[start[0], start[1]]
+    delete(start)
+  end
+
   def move(start, finish)
     if self[start[0], start[1]].nil?
       raise "That is not a valid start position"
@@ -113,9 +118,14 @@ class Board
       raise "Your piece can't go there"
     end
 
+    if self[start[0], start[1]].move_into_check?(finish)
+      raise "That move puts you in check!"
+    end
+
     self[finish[0], finish[1]] = self[start[0], start[1]]
     delete(start)
   end
+
 
   def delete(pos)
     self[pos[0], pos[1]] = nil
@@ -141,5 +151,6 @@ class Board
 
     duped_board
   end
+
 
 end

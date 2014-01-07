@@ -1,12 +1,9 @@
 require_relative 'board'
 
 b = Board.new
-d = b.dup
-d[4,1] = nil
-d[4,5] = Rook.new(b, [4,5], :b)
-d.move([7,6],[7,5])
-puts 'board b'
+b[4,1] = nil
+b[4,5] = Rook.new(b, [4,5], :b)
+
+#b.move([1,1], [1,2])
+b.move([3,0],[4,1])
 b.render
-puts
-puts 'd board'
-d.render

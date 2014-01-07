@@ -13,6 +13,12 @@ class Piece
   def opposite_color
     self.color == :w ? :b : :w
   end
+
+  def move_into_check?(target)
+    duped_board = self.board.dup
+    duped_board.move!(self.pos, target)
+    duped_board.in_check?(self.color)
+  end
 end
 
 class SlidingPiece < Piece
