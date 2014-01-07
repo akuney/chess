@@ -3,9 +3,9 @@ require "./pieces"
 class Board
   attr_accessor :rows, :pieces
 
-  def initialize
+  def initialize(populate = true)
     @rows = Board.blank_grid
-    populate_board
+    populate_board if populate == true
   end
 
   def self.blank_grid
@@ -120,4 +120,26 @@ class Board
   def delete(pos)
     self[pos[0], pos[1]] = nil
   end
+
+  def dup
+    duped_board = Board.new(false)
+
+    pieces = all_pieces(:b) + all_pieces(:w)
+
+    pieces.each do |piece|
+      if piece.class != BlackPawn && piece.class != WhitePawn
+        duped_board[piece.pos[0], piece.pos[1]] =
+        piece.class.new(duped_board, piece.pos, piece.color)
+      elsif piece.class == BlackPawn
+        duped_board[piece.pos[0], piece.pos[1]] =
+        BlackPawn.new(duped_board, piece.pos)
+      elsif piece.class == WhitePawn
+        duped_board[piece.pos[0], piece.pos[1]] =
+        WhitePawn.new(duped_board, piece.pos)
+      end
+    end
+
+    duped_board
+  end
+
 end
