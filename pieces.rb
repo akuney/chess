@@ -5,6 +5,7 @@ class Piece
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
+    @display_symbol = (self.color.to_s + self.symbol.to_s).to_sym
   end
 
   def moves

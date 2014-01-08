@@ -54,7 +54,7 @@ class Board
     display_board = []
 
     self.rows.each do |row|
-      display_row = row.map{|piece| piece.nil? ? nil : piece.symbol}
+      display_row = row.map{|piece| piece.nil? ? nil : piece.display_symbol}
       display_board << display_row
     end
 
@@ -106,7 +106,8 @@ class Board
 
   def move!(start, finish)
     self[finish[0], finish[1]] = self[start[0], start[1]]
-    delete(start)
+    self.delete(start)
+    self[finish[0], finish[1]].pos = [finish[0], finish[1]]
   end
 
   def move(start, finish)
@@ -124,8 +125,8 @@ class Board
 
     self[finish[0], finish[1]] = self[start[0], start[1]]
     delete(start)
+    self[finish[0], finish[1]].pos = [finish[0], finish[1]]
   end
-
 
   def delete(pos)
     self[pos[0], pos[1]] = nil
