@@ -1,4 +1,17 @@
-require_relative 'pieces'
+require_relative 'piece'
+
+require_relative 'slidingPiece'
+require_relative 'steppingPiece'
+
+require_relative 'rook'
+require_relative 'bishop'
+require_relative 'queen'
+
+require_relative 'king'
+require_relative 'knight'
+
+require_relative 'pawn'
+
 
 class Board
   attr_accessor :rows, :pieces
@@ -71,7 +84,7 @@ class Board
 
   def [](x,y)
     self.rows[y][x]
-  end
+  end # change ot take one arg
 
   def all_pieces(color)
     pieces = []
@@ -91,6 +104,7 @@ class Board
         return piece if piece.class == King && piece.color == color
       end
     end
+    #self.rows.flatten.compact
   end
 
   def in_check?(color)
