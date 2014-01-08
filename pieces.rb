@@ -1,5 +1,3 @@
-require 'debugger'
-
 class Piece
   attr_accessor :board, :pos, :color, :symbol, :display_symbol
 
@@ -46,7 +44,7 @@ class SlidingPiece < Piece
 
         if !next_pos[0].between?(0,7) || !next_pos[1].between?(0,7)
           break
-        end
+        end #refactor with .all?
 
         # if there is something in the next_pos square
         unless self.board[next_pos[0], next_pos[1]].nil?

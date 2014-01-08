@@ -1,11 +1,11 @@
-require "./pieces"
+require_relative 'pieces'
 
 class Board
   attr_accessor :rows, :pieces
 
   def initialize(populate = true)
     @rows = Board.blank_grid
-    populate_board if populate == true
+    populate_board if populate
   end
 
   def self.blank_grid
@@ -13,6 +13,8 @@ class Board
   end
 
   def populate_board
+    #refactor
+
     rook_positions = [[0,0], [0,7], [7,0], [7,7]]
     knight_positions = [[1,0], [6,0], [1,7], [6,7]]
     bishop_positions = [[2,0], [5,0], [2,7], [5,7]]

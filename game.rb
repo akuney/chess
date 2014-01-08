@@ -1,6 +1,3 @@
-load 'pieces.rb'
-load 'board.rb'
-
 require_relative 'board'
 
 class Game
@@ -50,6 +47,8 @@ class Player
   end
 
   def play_turn(board)
+    puts "It is #{self.name}'s turn."
+
     begin
       puts "Enter the start coordinates (for example '1,2')"
       start = gets.chomp.split(",").map{|s| s.to_i}
