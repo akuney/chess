@@ -7,16 +7,15 @@ class SteppingPiece < Piece
     possible_moves = []
     self.move_dirs.each do |dir|
 
-      next_x = self.pos[0] + dir[0]
-      next_y = self.pos[1] + dir[1]
+      next_pos = [(self.pos[0] + dir[0]), (self.pos[1] + dir[1])]
 
-      next if !next_x.between?(0,7) || !next_y.between?(0,7)
+      next unless next_pos.all? { |i| i.between?(0,7) }
 
-      if self.board[next_x, next_y].nil?
-        possible_moves << [next_x, next_y]
+      if self.board[next_pos].nil?
+        possible_moves << next_pos
       else
-        unless self.color == self.board[next_x, next_y].color
-          possible_moves << [next_x, next_y]
+        unless self.color == self.board[next_pos].color
+          possible_moves << next_pos
         end
       end
 

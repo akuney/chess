@@ -9,32 +9,22 @@ class SlidingPiece < Piece
 
     self.move_dirs.each do |dir|
       num_steps = 1
+      blocked = false
 
-      loop do
-
+      until blocked
         next_step = [dir[0]*num_steps, dir[1]*num_steps]
         next_pos = [self.pos[0] + next_step[0], self.pos[1] + next_step[1]]
 
-        if !next_pos[0].between?(0,7) || !next_pos[1].between?(0,7)
-          break
-        end #refactor with .all?
+        blocked = true unless next_pos.all? { |i| i.between?(0,7) }
 
-        # if there is something in the next_pos square
-        unless self.board[next_pos[0], next_pos[1]].nil?
-          other_piece_color = self.board[next_pos[0], next_pos[1]].color
-
-          if self.color == other_piece_color
-            break
-          else
-            possible_moves << next_pos
-            break
-          end
-
+        if self.board[next_pos]
+          blocked = true
+          piece_color = self.board[next_pos].color
+          possible_moves << next_pos unless self.color == piece.color
         else
           possible_moves << next_pos
           num_steps += 1
         end
-
       end
     end
 

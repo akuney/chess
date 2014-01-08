@@ -26,44 +26,35 @@ class Board
   end
 
   def populate_board
-    #refactor
-
-    rook_positions = [[0,0], [0,7], [7,0], [7,7]]
-    knight_positions = [[1,0], [6,0], [1,7], [6,7]]
-    bishop_positions = [[2,0], [5,0], [2,7], [5,7]]
-
-    # white pieces
-    (0..7).each do |x|
-      if rook_positions.include?([x,0])
-        self[x,0] = Rook.new(self, [x, 0], :w)
-      elsif knight_positions.include?([x,0])
-        self[x,0] = Knight.new(self, [x, 0], :w)
-      elsif bishop_positions.include?([x, 0])
-        self[x,0] = Bishop.new(self, [x, 0], :w)
-      end
-    end
-    self[3,0] = Queen.new(self, [3, 0], :w)
-    self[4,0] = King.new(self, [4, 0], :w)
-
-    #making all pawns
-    (0..7).each do |x|
-      self[x,1] = WhitePawn.new(self, [x, 1])
-      self[x,6] = BlackPawn.new(self, [x, 6])
-    end
-
-    (0..7).each do |x|
-      if rook_positions.include?([x,7])
-        self[x,7] = Rook.new(self, [x, 7], :b)
-      elsif knight_positions.include?([x,7])
-        self[x,7] = Knight.new(self, [x, 7], :b)
-      elsif bishop_positions.include?([x, 7])
-        self[x,7] = Bishop.new(self, [x, 7], :b)
-      end
-    end
-    self[3,7] = Queen.new(self, [3, 7], :b)
-    self[4,7] = King.new(self, [4, 7], :b)
-
+    make_pieces(:w)
+    make_pieces(:b)
   end
+
+  def make_pieces(color)
+    piece_row = (color == :w ? 0 : 7)
+    pawn_row = (color == :w ? 1 : 6)
+
+    (0..7).each do |x|
+      pos = [x,piece_row]
+      pawn_pos = [x, pawn_row]
+
+      case x
+      when 0, 7
+        self[pos] = Rook.new(self, pos, color)
+      when 1, 6
+        self[pos] = Knight.new(self, pos, color)
+      when 2, 5
+        self[pos] = Bishop.new(self, pos, color)
+      when 3
+        self[pos] = Queen.new(self, pos, color)
+      when 4
+        self[pos] = King.new(self, pos, color)
+      end
+
+      self[pawn_pos] = Pawn.new(self, pawn_pos, color)
+    end
+  end
+
 
   def render
     display_board = []
@@ -78,13 +69,13 @@ class Board
     end
   end
 
-  def []=(x, y, piece)
-    self.rows[y][x] = piece
+  def []=(pos, piece)
+    self.rows[pos[1]][pos[0]] = piece
   end
 
-  def [](x,y)
-    self.rows[y][x]
-  end # change ot take one arg
+  def [](pos)
+    self.rows[pos[1]][pos[0]]
+  end
 
   def all_pieces(color)
     pieces = []
@@ -121,31 +112,32 @@ class Board
   end
 
   def move!(start, finish)
-    self[finish[0], finish[1]] = self[start[0], start[1]]
+    self[finish] = self[start]
     self.delete(start)
-    self[finish[0], finish[1]].pos = [finish[0], finish[1]]
+    self[finish].pos = finish #updates the position of the piece
+    #even though it's already updated on the board
   end
 
   def move(start, finish)
-    if self[start[0], start[1]].nil?
+    if self[start].nil?
       raise "That is not a valid start position"
     end
 
-    unless self[start[0], start[1]].moves.include?(finish)
+    unless self[start].moves.include?(finish)
       raise "Your piece can't go there"
     end
 
-    if self[start[0], start[1]].move_into_check?(finish)
+    if self[start].move_into_check?(finish)
       raise "That move puts you in check!"
     end
 
-    self[finish[0], finish[1]] = self[start[0], start[1]]
-    delete(start)
-    self[finish[0], finish[1]].pos = [finish[0], finish[1]]
+    self[finish] = self[start]
+    self.delete(start)
+    self[finish].pos = finish
   end
 
   def delete(pos)
-    self[pos[0], pos[1]] = nil
+    self[pos] = nil
   end
 
   def dup
@@ -155,19 +147,19 @@ class Board
 
     pieces.each do |piece|
       if piece.class != BlackPawn && piece.class != WhitePawn
-        duped_board[piece.pos[0], piece.pos[1]] =
+        duped_board[piece.pos] =
         piece.class.new(duped_board, piece.pos, piece.color)
       elsif piece.class == BlackPawn
-        duped_board[piece.pos[0], piece.pos[1]] =
+        duped_board[piece.pos] =
         BlackPawn.new(duped_board, piece.pos)
       elsif piece.class == WhitePawn
-        duped_board[piece.pos[0], piece.pos[1]] =
+        duped_board[piece.pos] =
         WhitePawn.new(duped_board, piece.pos)
       end
     end
 
     duped_board
-  end
+  end #need to alter if we make single Pawn class
 
   def checkmate?(color)
     cant_move = all_pieces(color).all? { |piece| piece.valid_moves.empty? }
