@@ -20,22 +20,21 @@ class Game
       unless self.board.checkmate?(self.current_player.color)
         self.board.render
         self.current_player.play_turn(self.board)
-
       else
         winner = self.other_player
         break
       end
-
       switch_player
     end
 
-    puts "The winner is #{winner.name}!"
+    puts "Checkmate! The winner is #{winner.name}."
   end
 
   def switch_player
     self.current_player, self.other_player =
     self.other_player, self.current_player
   end
-
 end
+
+
 

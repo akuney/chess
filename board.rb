@@ -55,7 +55,6 @@ class Board
     end
   end
 
-
   def render
     display_board = []
 
@@ -80,29 +79,23 @@ class Board
   def all_pieces(color)
     pieces = []
 
-    self.rows.each do |row|
-      row.each do |piece|
-        pieces << piece if !piece.nil? && piece.color == color
-      end
+    self.rows.flatten.compact.each do |piece|
+      pieces << piece if piece && piece.color == color
     end
 
     pieces
   end
 
-  def find_king(color)
-    self.rows.each do |row|
-      row.each do |piece|
-        return piece if piece.class == King && piece.color == color
-      end
+  def find_king_coords(color)
+    self.rows.flatten.compact.each do |piece|
+      return piece.pos if piece.class == King && piece.color == color
     end
-    #self.rows.flatten.compact
   end
 
   def in_check?(color)
     opposite_color = ( (color == :w) ? :b : :w)
     opposing_pieces = all_pieces(opposite_color)
-
-    king_coords = find_king(color).pos
+    king_coords = find_king_coords(color)
 
     opposing_pieces.each do |piece|
       return true if piece.moves.include?(king_coords)
@@ -114,8 +107,7 @@ class Board
   def move!(start, finish)
     self[finish] = self[start]
     self.delete(start)
-    self[finish].pos = finish #updates the position of the piece
-    #even though it's already updated on the board
+    self[finish].pos = finish
   end
 
   def move(start, finish)
@@ -142,20 +134,10 @@ class Board
 
   def dup
     duped_board = Board.new(false)
-
     pieces = all_pieces(:b) + all_pieces(:w)
 
     pieces.each do |piece|
-      if piece.class != BlackPawn && piece.class != WhitePawn
-        duped_board[piece.pos] =
-        piece.class.new(duped_board, piece.pos, piece.color)
-      elsif piece.class == BlackPawn
-        duped_board[piece.pos] =
-        BlackPawn.new(duped_board, piece.pos)
-      elsif piece.class == WhitePawn
-        duped_board[piece.pos] =
-        WhitePawn.new(duped_board, piece.pos)
-      end
+      duped_board[piece.pos] = piece.class.new(duped_board, piece.pos, piece.color)
     end
 
     duped_board

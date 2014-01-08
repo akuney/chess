@@ -15,12 +15,11 @@ class SlidingPiece < Piece
         next_step = [dir[0]*num_steps, dir[1]*num_steps]
         next_pos = [self.pos[0] + next_step[0], self.pos[1] + next_step[1]]
 
-        blocked = true unless next_pos.all? { |i| i.between?(0,7) }
+        break unless next_pos.all? { |i| i.between?(0,7) }
 
         if self.board[next_pos]
           blocked = true
-          piece_color = self.board[next_pos].color
-          possible_moves << next_pos unless self.color == piece.color
+          possible_moves << next_pos unless self.color == self.board[next_pos].color
         else
           possible_moves << next_pos
           num_steps += 1

@@ -6,7 +6,6 @@ class SteppingPiece < Piece
   def moves
     possible_moves = []
     self.move_dirs.each do |dir|
-
       next_pos = [(self.pos[0] + dir[0]), (self.pos[1] + dir[1])]
 
       next unless next_pos.all? { |i| i.between?(0,7) }
@@ -18,7 +17,6 @@ class SteppingPiece < Piece
           possible_moves << next_pos
         end
       end
-
     end
 
     possible_moves
