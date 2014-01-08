@@ -1,7 +1,7 @@
 require 'debugger'
 
 class Piece
-  attr_accessor :board, :pos, :color, :symbol
+  attr_accessor :board, :pos, :color, :symbol, :display_symbol
 
   def initialize(board, pos, color)
     @board, @pos, @color = board, pos, color
@@ -100,32 +100,31 @@ end
 
 class Bishop < SlidingPiece
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :b
     @move_dirs = [[1, 1], [1, -1], [-1, 1], [-1, -1]]
+    super(board, pos, color)
   end
 end
 
 class Rook < SlidingPiece
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :r
     @move_dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+    super(board, pos, color)
   end
 end
 
 class Queen < SlidingPiece
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :q
     @move_dirs = [[1, 1], [1, -1], [-1, 1], [-1, -1],
     [1, 0], [-1, 0], [0, 1], [0, -1]]
+    super(board, pos, color)
   end
 end
 
 class Knight < SteppingPiece
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :n
     @move_dirs = [
       [2,1],
@@ -137,12 +136,12 @@ class Knight < SteppingPiece
       [-2,1],
       [-2,-1]
     ]
+    super(board, pos, color)
   end
 end
 
 class King < SteppingPiece
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :k
     @move_dirs = [
       [1,1 ],
@@ -154,6 +153,7 @@ class King < SteppingPiece
       [-1, 0],
       [-1,-1]
     ]
+    super(board, pos, color)
   end
 end
 
@@ -161,8 +161,8 @@ class Pawn < Piece
   attr_accessor :forward_dir, :diag_dirs, :starting_row
 
   def initialize(board, pos, color)
-    super(board, pos, color)
     @symbol = :p
+    super(board, pos, color)
   end
 
   def moves

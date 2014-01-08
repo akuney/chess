@@ -1,3 +1,8 @@
+load 'pieces.rb'
+load 'board.rb'
+
+require_relative 'board'
+
 class Game
   attr_accessor :player1, :player2, :board
   attr_accessor :current_player, :other_player
@@ -45,13 +50,13 @@ class Player
   end
 
   def play_turn(board)
-    puts "Enter the start coordinates (for example '1,2')"
-    start = gets.chomp.split(",").map{|s| s.to_i}
-
-    puts "Enter the target coordinates"
-    finish = gets.chomp.split(",").map{|s| s.to_i}
-
     begin
+      puts "Enter the start coordinates (for example '1,2')"
+      start = gets.chomp.split(",").map{|s| s.to_i}
+
+      puts "Enter the target coordinates"
+      finish = gets.chomp.split(",").map{|s| s.to_i}
+
       board.move(start, finish)
     rescue
       puts "Please enter another move"
