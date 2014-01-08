@@ -56,15 +56,17 @@ class Board
   end
 
   def render
-    display_board = []
+    display_board = [(0..7).to_a.map { |i| "#{i.to_s} "}]
 
     self.rows.each do |row|
-      display_row = row.map{|piece| piece.nil? ? nil : piece.display_symbol}
+      display_row = row.map{|piece| piece.nil? ? '__' : piece.display_symbol}
       display_board << display_row
     end
 
-    display_board.each do |row|
-      puts row.inspect
+    display_board.each_with_index do |row, i|
+      i == 0 ? (print '  ') : (print "#{i - 1} ")
+      row.each { |square| print "#{square} " }
+      puts
     end
   end
 
