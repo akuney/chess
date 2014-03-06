@@ -11,6 +11,8 @@ class Game
     @current_player = self.player1
     @other_player = self.player2
     @board = Board.new
+
+    self.play
   end
 
   def play

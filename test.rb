@@ -1,5 +1,5 @@
 require_relative 'game'
 
 
-g = Game.new("Paris", "Andre")
+g = Game.new("White", "Black")
 g.play
