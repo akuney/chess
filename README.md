@@ -2,7 +2,7 @@ Chess
 =====
 Authors: Andre Kuney, Paris Yee
 
-An example of well-refactored object-oriented Ruby design. No long methods or super-long classes anywhere.
+An example of well-refactored object-oriented Ruby design. No long methods or super-long classes anywhere. Run the 'test.rb' file to play the game.
 
 ###Game
 
